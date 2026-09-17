@@ -1,0 +1,525 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#1f2a44">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="HSK 3 Study">
+  <meta name="format-detection" content="telephone=no">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/icon-180.png">
+  <title>HSK 3 Study &amp; Writing</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="app-header">
+    <div class="brand-wrap">
+      <div class="brand-mark" aria-hidden="true" lang="zh-Hans">汉</div>
+      <div>
+        <div class="brand">HSK 3 Study &amp; Writing</div>
+        <div class="brand-subtitle">Cards, examples, and handwriting</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <span class="version-badge" title="This deck follows the classic 600-word HSK 3 syllabus">Classic HSK · 600</span>
+      <button class="icon-button" id="themeToggle" type="button" aria-label="Switch theme" title="Switch theme">◐</button>
+    </div>
+  </header>
+
+  <nav class="primary-nav" aria-label="Main navigation">
+    <button class="nav-button active" type="button" data-view-target="dashboard" aria-current="page">Home</button>
+    <button class="nav-button" type="button" data-view-target="review">Cards</button>
+    <button class="nav-button" type="button" data-view-target="writing">Write</button>
+    <button class="nav-button" type="button" data-view-target="vocabulary">Words</button>
+    <button class="nav-button" type="button" data-view-target="more">More</button>
+  </nav>
+
+  <main id="main" class="main-shell" tabindex="-1">
+    <section class="view active" id="view-dashboard" data-view="dashboard" aria-labelledby="dashboardTitle">
+      <div class="hero-grid">
+        <div>
+          <p class="eyebrow" id="todayLabel">YOUR STUDY DAY</p>
+          <h1 id="dashboardTitle">Ready for a focused hour?</h1>
+          <p class="hero-copy" id="todayGuidance">Your plan will appear here.</p>
+          <div class="hero-actions">
+            <button class="button primary" type="button" id="todayAction">Start today’s task</button>
+            <button class="button secondary" type="button" id="smartReviewAction">Smart review</button>
+          </div>
+        </div>
+        <div class="countdown-card" aria-label="Exam countdown">
+          <span class="countdown-number" id="daysToExam">—</span>
+          <span class="countdown-label">days to exam</span>
+          <span class="countdown-date">7 November 2026</span>
+        </div>
+      </div>
+
+      <div class="notice syllabus-notice" role="note">
+        <div class="notice-icon" aria-hidden="true">!</div>
+        <div>
+          <strong>Confirm your exam version.</strong>
+          The 7 November date appears on the regular 2026 HSK calendar, while HSK 3.0 was announced separately as a 20 September trial. This app uses the classic 600-word syllabus from your PDF. Confirm with your test centre before relying on this deck alone.
+        </div>
+      </div>
+
+      <div class="stat-grid" aria-label="Study progress">
+        <article class="stat-card">
+          <span class="stat-label">In review</span>
+          <strong class="stat-value" id="statLearned">0</strong>
+          <span class="stat-detail" id="statLearnedDetail">of 600 introduced</span>
+        </article>
+        <article class="stat-card">
+          <span class="stat-label">Due now</span>
+          <strong class="stat-value" id="statDue">0</strong>
+          <span class="stat-detail">review cards</span>
+        </article>
+        <article class="stat-card">
+          <span class="stat-label">Weak words</span>
+          <strong class="stat-value" id="statWeak">0</strong>
+          <span class="stat-detail">need extra attention</span>
+        </article>
+        <article class="stat-card">
+          <span class="stat-label">Today</span>
+          <strong class="stat-value" id="statToday">0</strong>
+          <span class="stat-detail">answers recorded</span>
+        </article>
+      </div>
+
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">CHOOSE A SESSION</p>
+          <h2>Study with a clear purpose</h2>
+        </div>
+      </div>
+      <div class="mode-grid">
+        <article class="mode-card featured">
+          <span class="mode-kicker">Recommended</span>
+          <h3>Smart review</h3>
+          <p>Overdue cards first, then weak cards and a small random sample.</p>
+          <button class="text-button" type="button" data-start-mode="smart">Review due cards <span aria-hidden="true">→</span></button>
+        </article>
+        <article class="mode-card">
+          <span class="mode-kicker">Shuffled set</span>
+          <h3>Random practice</h3>
+          <p>Start with one copy of each selected word; missed cards return once.</p>
+          <button class="text-button" type="button" data-start-mode="random">Start random cards <span aria-hidden="true">→</span></button>
+        </article>
+        <article class="mode-card">
+          <span class="mode-kicker">Daily batch</span>
+          <h3>Learn new words</h3>
+          <p>Work through the next unlearned words in your 600-card deck.</p>
+          <button class="text-button" type="button" data-start-mode="learn">Open next batch <span aria-hidden="true">→</span></button>
+        </article>
+      </div>
+
+      <section class="progress-panel" aria-labelledby="masteryTitle">
+        <div class="panel-title-row">
+          <div>
+            <p class="eyebrow">DECK PROGRESS</p>
+            <h2 id="masteryTitle">Coverage at a glance</h2>
+          </div>
+          <span id="masteryPercent" class="progress-percent">0%</span>
+        </div>
+        <div class="progress-track" aria-hidden="true"><span id="masteryBar"></span></div>
+        <div class="progress-legend">
+          <span><i class="legend-dot learned"></i><b id="legendLearned">0</b> in review</span>
+          <span><i class="legend-dot new"></i><b id="legendNew">600</b> remaining</span>
+          <span><i class="legend-dot strong"></i><b id="legendStrong">0</b> strong</span>
+        </div>
+      </section>
+    </section>
+
+    <section class="view" id="view-review" data-view="review" aria-labelledby="reviewTitle">
+      <div id="sessionSetup" class="study-setup">
+        <p class="eyebrow">STUDY</p>
+        <h1 id="reviewTitle">Choose how you want to practise</h1>
+        <p class="lead">Meaning is self-graded so synonyms do not count against you.</p>
+
+        <div class="setup-grid">
+          <label class="field-label">Session type
+            <select id="sessionMode">
+              <option value="smart">Smart review</option>
+              <option value="random">Random review pool</option>
+              <option value="learn">Next new words</option>
+              <option value="diagnostic">Diagnostic sample</option>
+              <option value="mistakes">Mistakes from last session</option>
+            </select>
+          </label>
+          <label class="field-label">Prompt direction
+            <select id="sessionDirection">
+              <option value="mixed">Mixed</option>
+              <option value="hanzi">Hanzi → meaning</option>
+              <option value="meaning">Meaning → Hanzi</option>
+            </select>
+          </label>
+          <label class="field-label">Cards
+            <select id="sessionSize">
+              <option value="10">10</option>
+              <option value="20" selected>20</option>
+              <option value="30">30</option>
+              <option value="60">60</option>
+              <option value="100">100</option>
+              <option value="all">All available</option>
+            </select>
+          </label>
+        </div>
+        <button class="button primary large" type="button" id="startConfiguredSession">Start session</button>
+        <div class="keyboard-note">During a card: <kbd>Enter</kbd> reveal while typing · <kbd>Space</kbd> reveal outside the text box · <kbd>1</kbd>–<kbd>4</kbd> rate</div>
+      </div>
+
+      <div id="sessionActive" class="session-area" hidden>
+        <div class="session-topbar">
+          <div>
+            <span class="session-mode-label" id="activeModeLabel">Smart review</span>
+            <strong id="sessionProgressText" aria-live="polite">Card 1 of 20</strong>
+          </div>
+          <div class="session-top-actions">
+            <button class="button ghost small" type="button" id="endSessionButton">End session</button>
+          </div>
+        </div>
+        <div class="session-progress-track" aria-hidden="true"><span id="sessionProgressBar"></span></div>
+
+        <article class="flashcard" id="flashcard">
+          <div class="card-meta-row">
+            <span class="card-number" id="cardNumber">Word 1</span>
+            <span class="direction-chip" id="directionChip">Hanzi → meaning</span>
+          </div>
+          <div class="prompt-label" id="promptLabel">What does this mean?</div>
+          <div class="card-prompt hanzi" id="cardPrompt" lang="zh-Hans" aria-live="polite">你好</div>
+
+          <label class="guess-label" for="guessInput">Your guess <span>(optional)</span></label>
+          <input id="guessInput" class="guess-input" type="text" autocomplete="off" placeholder="Type what you remember…">
+
+          <div class="answer-panel" id="answerPanel" aria-live="polite" hidden>
+            <div class="answer-hanzi" id="answerHanzi" lang="zh-Hans">你好</div>
+            <div class="answer-pinyin" id="answerPinyin">nǐhǎo</div>
+            <div class="answer-meaning" id="answerMeaning">hello</div>
+            <button class="speak-button" id="speakButton" type="button" aria-label="Hear Chinese pronunciation"><span aria-hidden="true">◖)))</span> Hear word</button>
+          </div>
+
+          <button class="button primary reveal-button" type="button" id="revealButton">Reveal answer <span class="shortcut">Space</span></button>
+          <div class="rating-grid" id="ratingButtons" hidden>
+            <button class="rating again" type="button" data-rating="again"><span>Again</span><small>1 · incorrect</small></button>
+            <button class="rating hard" type="button" data-rating="hard"><span>Hard</span><small>2 · partly right</small></button>
+            <button class="rating good" type="button" data-rating="good"><span>Good</span><small>3 · correct</small></button>
+            <button class="rating easy" type="button" data-rating="easy"><span>Easy</span><small>4 · instant</small></button>
+          </div>
+        </article>
+      </div>
+
+      <div id="sessionSummary" class="summary-card" hidden>
+        <div class="summary-icon" aria-hidden="true">✓</div>
+        <p class="eyebrow">SESSION COMPLETE</p>
+        <h1>Good work—review the evidence.</h1>
+        <div class="summary-stats">
+          <div><strong id="summaryReviewed">0</strong><span>unique words</span></div>
+          <div><strong id="summaryAccuracy">0%</strong><span>good or easy</span></div>
+          <div><strong id="summaryMinutes">0</strong><span>minutes</span></div>
+        </div>
+        <div class="mistake-list-wrap" id="mistakeListWrap" hidden>
+          <h2>Words to revisit</h2>
+          <div class="mistake-list" id="mistakeList"></div>
+        </div>
+        <div class="summary-actions">
+          <button class="button primary" type="button" id="reviewMistakesButton">Review mistakes</button>
+          <button class="button secondary" type="button" id="returnDashboardButton">Return to dashboard</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="view" id="view-writing" data-view="writing" aria-labelledby="writingTitle">
+      <div class="section-heading align-end">
+        <div>
+          <p class="eyebrow">HANDWRITING PRACTICE</p>
+          <h1 id="writingTitle">Write one character at a time</h1>
+          <p class="lead">Trace the guide with your finger or Apple Pencil, then hide it and write from memory.</p>
+        </div>
+        <div class="writing-quick-actions">
+          <button class="button secondary" type="button" id="writingWeakButton">Practise a weak word</button>
+          <button class="button secondary" type="button" id="writingRandomButton">Random word</button>
+        </div>
+      </div>
+
+      <div class="writing-picker-grid">
+        <label class="field-label">Find a word
+          <input id="writingWordSearch" type="search" autocomplete="off" placeholder="Hanzi, pinyin, or meaning…">
+        </label>
+        <label class="field-label">Choose from the results
+          <select id="writingWordSelect" aria-describedby="writingWordPosition writingSearchStatus"></select>
+        </label>
+      </div>
+      <div class="table-status" id="writingSearchStatus" role="status">Showing nearby words. Search to filter all 600.</div>
+      <div class="sr-only" id="writingLiveStatus" role="status" aria-live="polite"></div>
+
+      <div class="writing-layout">
+        <article class="writing-context-card" aria-labelledby="writingWordHanzi">
+          <div class="writing-word-meta">
+            <span id="writingWordPosition">Word 1 of 600</span>
+            <span id="writingPracticeCount">Not practised yet</span>
+          </div>
+          <div class="writing-word-hanzi" id="writingWordHanzi" lang="zh-Hans">阿姨</div>
+          <div class="writing-word-pinyin" id="writingWordPinyin" lang="zh-Latn">āyí</div>
+          <div class="writing-word-meaning" id="writingWordMeaning">aunt</div>
+          <button class="speak-button" id="writingSpeakWord" type="button"><span aria-hidden="true">◖)))</span> Hear word</button>
+
+          <div class="example-block">
+            <p class="example-label">SHORT EXAMPLE</p>
+            <div class="example-hanzi" id="writingExampleHanzi" lang="zh-Hans"></div>
+            <div class="example-pinyin" id="writingExamplePinyin" lang="zh-Latn"></div>
+            <div class="example-english" id="writingExampleEnglish"></div>
+            <button class="speak-button" id="writingSpeakSentence" type="button"><span aria-hidden="true">◖)))</span> Hear sentence</button>
+          </div>
+        </article>
+
+        <article class="writing-pad-card">
+          <div class="writing-pad-context" aria-hidden="true">
+            <strong id="writingCompactHanzi" lang="zh-Hans">阿姨</strong>
+            <span id="writingCompactPinyin" lang="zh-Latn">āyí</span>
+            <span id="writingCompactMeaning">aunt</span>
+          </div>
+          <div class="writing-pad-heading">
+            <div>
+              <p class="eyebrow">CURRENT CHARACTER</p>
+              <h2 id="writingCharacterLabel">阿</h2>
+            </div>
+            <span class="writing-instruction">Follow the centre grid</span>
+          </div>
+
+          <div class="character-picker" id="writingCharacterButtons" aria-label="Characters in this word"></div>
+
+          <div class="writing-stage" id="writingStage">
+            <div class="writing-guide" id="writingGuideCharacter" lang="zh-Hans" aria-hidden="true">阿</div>
+            <canvas id="writingCanvas" aria-label="Handwriting area for the selected Chinese character">Use the character model and the written stroke guidance with a teacher if canvas drawing is not accessible.</canvas>
+          </div>
+
+          <div class="writing-tools">
+            <button class="button ghost" type="button" id="writingUndoButton">Undo stroke</button>
+            <button class="button ghost" type="button" id="writingClearButton">Clear</button>
+            <button class="button ghost" type="button" id="writingGuideButton" aria-pressed="true">Hide guide</button>
+            <button class="button ghost" type="button" id="writingPaperButton" aria-pressed="false">Practised on paper</button>
+          </div>
+
+          <details class="stroke-order-help">
+            <summary>Basic stroke-order guidance</summary>
+            <ol>
+              <li>Usually write from top to bottom and left to right.</li>
+              <li>When strokes cross, horizontal commonly comes before vertical.</li>
+              <li>Write the outside before the inside, then close a frame last.</li>
+            </ol>
+            <p>Some characters are exceptions. Use a trusted stroke-order model or teacher when a character is new.</p>
+          </details>
+
+          <div class="writing-complete-row">
+            <button class="button secondary" type="button" id="writingPreviousButton">Previous word</button>
+            <button class="button primary" type="button" id="writingCompleteButton" disabled>Write every character first</button>
+            <button class="button secondary" type="button" id="writingNextButton">Next word</button>
+          </div>
+          <p class="writing-note">The guide helps with shape and proportion. The basic rules above are not a character-specific stroke animation, and the app does not judge handwriting accuracy.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="view" id="view-vocabulary" data-view="vocabulary" aria-labelledby="vocabularyTitle">
+      <div class="section-heading align-end">
+        <div>
+          <p class="eyebrow">YOUR DECK</p>
+          <h1 id="vocabularyTitle">600 vocabulary cards</h1>
+          <p class="lead">Search, inspect, and decide which words belong in your review pool.</p>
+        </div>
+        <button class="button secondary" type="button" id="exportCsvButton">Export progress CSV</button>
+      </div>
+
+      <div class="vocab-toolbar">
+        <label class="search-field">
+          <span class="sr-only">Search vocabulary</span>
+          <input id="vocabSearch" type="search" placeholder="Search Hanzi, pinyin, or meaning…">
+        </label>
+        <label class="filter-field"><span>Status</span>
+          <select id="vocabFilter">
+            <option value="all">All words</option>
+            <option value="new">Not in review</option>
+            <option value="learned">In review</option>
+            <option value="weak">Weak</option>
+            <option value="strong">Strong</option>
+          </select>
+        </label>
+      </div>
+      <div class="table-status" id="vocabResultCount" role="status" aria-live="polite">Showing 600 words</div>
+      <div class="vocab-table-wrap" role="region" aria-label="Vocabulary results" tabindex="0">
+        <table class="vocab-table">
+          <caption class="sr-only">HSK 3 vocabulary and review status</caption>
+          <thead><tr><th scope="col">#</th><th scope="col">Word</th><th scope="col">Pinyin</th><th scope="col">Meaning</th><th scope="col">Actions</th></tr></thead>
+          <tbody id="vocabTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="view" id="view-more" data-view="more" aria-labelledby="moreTitle">
+      <p class="eyebrow">MORE</p>
+      <h1 id="moreTitle">Plan and app settings</h1>
+      <p class="lead">Open your dated study roadmap, manage backups, or check offline installation.</p>
+      <div class="mode-grid more-grid">
+        <article class="mode-card">
+          <span class="mode-kicker">Exam preparation</span>
+          <h2>Study plan</h2>
+          <p>See the complete workload from 16 September to the 7 November exam.</p>
+          <button class="text-button" type="button" data-view-target="plan">Open study plan <span aria-hidden="true">→</span></button>
+        </article>
+        <article class="mode-card">
+          <span class="mode-kicker">Your data</span>
+          <h2>Settings and backup</h2>
+          <p>Choose study defaults, export progress, and confirm offline readiness.</p>
+          <button class="text-button" type="button" data-view-target="settings">Open settings <span aria-hidden="true">→</span></button>
+        </article>
+      </div>
+    </section>
+
+    <section class="view" id="view-plan" data-view="plan" aria-labelledby="planTitle">
+      <p class="eyebrow">YOUR ROADMAP</p>
+      <h1 id="planTitle">110 focused hours before exam day</h1>
+      <p class="lead">The first phase screens your previous HSK 3 knowledge. The second phase turns weak vocabulary into exam performance.</p>
+
+      <div class="plan-summary-grid">
+        <article><strong>22 h</strong><span>16 Sep–15 Oct</span><small>1 hour · 5 days/week</small></article>
+        <article><strong>88 h</strong><span>16 Oct–6 Nov</span><small>4 hours · every day</small></article>
+        <article><strong>5</strong><span>full mock exams</span><small>18 Oct, 23 Oct, 28 Oct, 1 Nov, 4 Nov</small></article>
+      </div>
+
+      <div class="plan-table-wrap" role="region" aria-label="Dated HSK 3 study plan" tabindex="0">
+        <table class="plan-table">
+          <caption class="sr-only">Study dates, hours, vocabulary workload, and main targets</caption>
+          <thead><tr><th scope="col">Dates</th><th scope="col">Time</th><th scope="col">Vocabulary load</th><th scope="col">Main target</th></tr></thead>
+          <tbody>
+            <tr><td>16 Sep</td><td>1 h</td><td>Diagnostic only</td><td>Sample 60 random cards; tag strengths and gaps</td></tr>
+            <tr><td>17–18 Sep</td><td>2 × 1 h</td><td>Words 1–60 · 30/day</td><td>Screen and relearn</td></tr>
+            <tr><td>21–25 Sep</td><td>5 × 1 h</td><td>Words 61–210 · 30/day</td><td>Cumulative spaced review</td></tr>
+            <tr><td>28 Sep–2 Oct</td><td>5 × 1 h</td><td>Words 211–360 · 30/day</td><td>Cumulative spaced review</td></tr>
+            <tr><td>5–9 Oct</td><td>5 × 1 h</td><td>Words 361–510 · 30/day</td><td>Cumulative spaced review</td></tr>
+            <tr><td>12–14 Oct</td><td>3 × 1 h</td><td>Words 511–600 · 30/day</td><td>Finish the first pass</td></tr>
+            <tr><td>15 Oct</td><td>1 h</td><td>100-card checkpoint</td><td>Catch up and identify red-zone words</td></tr>
+            <tr><td>16–18 Oct</td><td>3 × 4 h</td><td>120 prompts/day</td><td>Error repair; Mock 1 on 18 Oct</td></tr>
+            <tr><td>19–25 Oct</td><td>7 × 4 h</td><td>120–150 prompts/day</td><td>Mock 2 on 23 Oct</td></tr>
+            <tr><td>26 Oct–1 Nov</td><td>7 × 4 h</td><td>100–120 prompts/day</td><td>Mocks 3–4 on 28 Oct and 1 Nov</td></tr>
+            <tr><td>2–6 Nov</td><td>5 × 4 h</td><td>60–100 weak prompts/day</td><td>Final Mock 5 on 4 Nov; taper on 5–6 Nov</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="routine-grid">
+        <article class="routine-card">
+          <p class="eyebrow">UNTIL 15 OCTOBER</p>
+          <h2>Your 60-minute session</h2>
+          <ol class="time-list">
+            <li><b>15 min</b><span>Due flashcards</span></li>
+            <li><b>20 min</b><span>Today’s 30-word screening batch</span></li>
+            <li><b>15 min</b><span>Listening or reading, alternating</span></li>
+            <li><b>10 min</b><span>Grammar or writing</span></li>
+          </ol>
+          <p class="routine-note">Thirty is a screening load, not a demand to master 30 completely unfamiliar words. Actively relearn at most 15–20 genuine gaps.</p>
+        </article>
+        <article class="routine-card dark">
+          <p class="eyebrow">FROM 16 OCTOBER</p>
+          <h2>Your 4-hour session</h2>
+          <ol class="time-list">
+            <li><b>60 min</b><span>Vocabulary and spaced review</span></li>
+            <li><b>60 min</b><span>Listening practice</span></li>
+            <li><b>60 min</b><span>Reading and grammar</span></li>
+            <li><b>60 min</b><span>Writing and error correction</span></li>
+          </ol>
+          <p class="routine-note">On mock days: 90 min test, 70 min correction, 40 min vocabulary errors, 40 min weakest-section drill.</p>
+        </article>
+      </div>
+
+      <div class="target-panel">
+        <div><span class="target-number">210+</span><span class="target-label">target score in two consecutive mocks</span></div>
+        <p>The pass mark is 180/300 in the classic format. A 210 target gives you a safer buffer; aim for no section below 60/100.</p>
+      </div>
+    </section>
+
+    <section class="view" id="view-settings" data-view="settings" aria-labelledby="settingsTitle">
+      <p class="eyebrow">SETTINGS & DATA</p>
+      <h1 id="settingsTitle">Make the app yours</h1>
+      <p class="lead">All progress stays locally in this browser profile unless you export a backup.</p>
+
+      <div class="settings-grid">
+        <section class="settings-card">
+          <h2>Study defaults</h2>
+          <label class="field-label">Default prompt direction
+            <select id="defaultDirection">
+              <option value="mixed">Mixed</option>
+              <option value="hanzi">Hanzi → meaning</option>
+              <option value="meaning">Meaning → Hanzi</option>
+            </select>
+          </label>
+          <label class="field-label">Default session size
+            <select id="defaultSize">
+              <option value="10">10 cards</option>
+              <option value="20">20 cards</option>
+              <option value="30">30 cards</option>
+              <option value="60">60 cards</option>
+              <option value="100">100 cards</option>
+            </select>
+          </label>
+          <label class="field-label">Appearance
+            <select id="themePreference">
+              <option value="system">Follow iPhone setting</option>
+              <option value="light">Light</option>
+              <option value="dark">Dark</option>
+            </select>
+          </label>
+          <label class="toggle-row"><span><b>Automatically speak answers</b><small>Uses an available Chinese voice on this device</small></span><input id="autoSpeak" type="checkbox"></label>
+        </section>
+
+        <section class="settings-card">
+          <h2>Offline installation</h2>
+          <p id="offlineStatus" role="status" aria-live="polite">Checking whether this app is ready offline…</p>
+          <p>For iPhone installation, open the hosted HTTPS address in Safari and choose Add to Home Screen.</p>
+        </section>
+
+        <section class="settings-card">
+          <h2>Backup and restore</h2>
+          <p>Export a backup weekly and before clearing Safari data, changing devices, or reinstalling the web app.</p>
+          <div class="stacked-actions">
+            <button class="button secondary" type="button" id="exportBackupButton">Export backup</button>
+            <button class="button secondary" type="button" id="importBackupButton">Import backup</button>
+            <input id="importBackupInput" type="file" accept="application/json,.json" hidden>
+          </div>
+        </section>
+
+        <section class="settings-card danger-card">
+          <h2>Reset progress</h2>
+          <p>This removes ratings, review status, and review history from this browser profile. Export a backup first.</p>
+          <button class="button danger" type="button" id="resetProgressButton">Reset all progress</button>
+        </section>
+
+        <section class="settings-card source-card">
+          <h2>About this deck</h2>
+          <p><b>Version:</b> Classic HSK 3 cumulative vocabulary (600 cards).</p>
+          <p>The supplied 2021 PDF contained 603 populated rows, three split parenthetical variants, an alignment error, and unreliable glosses. Variants were merged and meanings were cleaned for study use.</p>
+          <p><b>Important:</b> If your test centre confirms HSK 3.0, this deck is not sufficient; use the official new syllabus instead.</p>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="confirmDialog" class="confirm-dialog" aria-labelledby="confirmTitle" aria-describedby="confirmMessage">
+    <form method="dialog">
+      <h2 id="confirmTitle">Are you sure?</h2>
+      <p id="confirmMessage"></p>
+      <div class="dialog-actions">
+        <button class="button secondary" value="cancel">Cancel</button>
+        <button class="button danger" id="confirmAccept" value="confirm">Confirm</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="vocab.js"></script>
+  <script src="examples.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

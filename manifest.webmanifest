@@ -1,0 +1,25 @@
+{
+  "name": "HSK 3 Study & Writing",
+  "short_name": "HSK 3",
+  "id": "./index.html",
+  "description": "Classic HSK 3 flashcards, examples, study planning, and touch handwriting practice.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f6f2e9",
+  "theme_color": "#1f2a44",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
